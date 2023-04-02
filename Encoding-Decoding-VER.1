@@ -1,1 +1,199 @@
-#WORK IN PROGRESS
+//DISCLAIMER: NOT MY WORK!!
+// THIS CODE IS FOR EDUCATION ONLY, MEANT TO BE TREATED AS STANDARD FOR GOOD PROGRAMMING FORM
+
+
+
+
+#include <stdio.h>
+#include <ctype.h>
+#include <stdlib.h>
+
+
+char find_encode(char c, int h) {
+    int n;
+    n = (int) c;
+    n = n + h;
+    if (isupper(c) != 0) {  // check if c is uppercase
+        while (n > 'Z')
+            n = n - 'Z' + 'A' - 1;
+    }
+    else {
+        while (n > 'z')
+            n = n - 'z' + 'a' - 1;
+    }
+    return (char) n;
+}
+
+
+char find_decode(char c, int h) {
+    int n;
+    n = (int) c;
+    n = n - h;
+    if (isupper(c) != 0) {  // check if c is uppercase
+        while (n < 'A')
+            n = n + 'Z' - 'A' + 1;
+    }
+    else {
+        while (n < 'a')
+            n = n + 'z' - 'a' + 1;
+    }
+    return (char) n;
+}
+
+
+
+int encode(FILE *fin, FILE *fout) {
+    char c, c0, new_c;
+    int start = 0, k = 0, n, h, count = 0;
+
+    while(fscanf(fin, "%c", &c) == 1) {
+        count ++;
+        if (isdigit(c) == 1) {   // check if c is a number (isdigit(c) == 1 means that c is a number)
+            n = c - '0';            // turn c into his correspondent number
+            n = (n + k) % 10;
+            k++;
+            fprintf(fout, "%d", n);
+            c0 = c;                 // update c0
+        }
+        else if (isalpha(c) != 0) {       // check if c is an alphabetic character (isalpha(c) != 0 means that c is an alphabetic character)
+            if (start != 0) {                // if it's not the first character that we are reading
+                if (isalpha(c0) == 0) {   // if c0 is not an alphabetic character
+                    fprintf(fout, "%c", c);
+                    c0 = c;
+                }
+                else if (c0 >= 'a' && c0 <= 'z') {       // check if c0 is lowercase
+                    h = c0 - 'a';
+                    new_c = find_encode(c, h);
+                    fprintf(fout, "%c", new_c);
+                    c0 = new_c;
+                }
+                else if (c0 >= 'A' && c0 <= 'Z') {      // check if c0 is uppercase
+                    h = c0 - 'A';
+                    new_c = find_encode(c, h);
+                    fprintf(fout, "%c", new_c);
+                    c0 = new_c;
+                }
+            }
+            else {
+                fprintf(fout, "%c", c);
+                c0 = c;
+            }
+
+        }
+        else {
+            fprintf(fout, "%c", c);
+            c0 = c;
+        }
+
+
+
+        if (start == 0)
+            start = 1;
+
+    }
+    return count;
+}
+
+
+int decode(FILE *fin, FILE *fout) {
+    char c, c0, new_c;
+    int start = 0, k = 0, n, h, count = 0;
+
+    while(fscanf(fin, "%c", &c) == 1) {
+        count ++;
+        if (isdigit(c) == 1) {   // check if c is a number (isdigit(c) == 1 means that c is a number)
+            n = c - '0';            // turn c into his correspondent number
+            n = n - k;
+            if (n < 0)
+                n = n + 10;
+            k++;
+            fprintf(fout, "%d", n);
+            c0 = c;                 // update c0
+        }
+        else if (isalpha(c) != 0) {       // check if c is an alphabetic character (isalpha(c) != 0 means that c is an alphabetic character)
+            if (start != 0) {                // if it's not the first character that we are reading
+                if (isalpha(c0) == 0) {   // if c0 is not an alphabetic character
+                    fprintf(fout, "%c", c);
+                    c0 = c;
+                }
+                else if (c0 >= 'a' && c0 <= 'z') {       // check if c0 is lowercase
+                    h = c0 - 'a';
+                    new_c = find_decode(c, h);
+                    fprintf(fout, "%c", new_c);
+                    c0 = c;
+                }
+                else if (c0 >= 'A' && c0 <= 'Z') {      // check if c0 is uppercase
+                    h = c0 - 'A';
+                    new_c = find_decode(c, h);
+                    fprintf(fout, "%c", new_c);
+                    c0 = c;
+                }
+            }
+            else {
+                fprintf(fout, "%c", c);
+                c0 = c;
+            }
+
+        }
+        else {
+            fprintf(fout, "%c", c);
+            c0 = c;
+        }
+
+
+
+        if (start == 0)
+            start = 1;
+
+    }
+    return count;
+
+}
+
+
+
+
+
+
+
+
+
+int main() {
+    setbuf(stdout, 0);
+    FILE *fin, *fout;
+    int choice;
+
+    printf("What do you want to do?\n");
+    printf("[0] Encode\n[1] Decode\n");
+
+    scanf("%d", &choice);
+
+    if (choice == 0) {
+        fin = fopen("../source1.txt", "r");
+        fout = fopen("../recoded.txt", "w");
+        if (fin == NULL || fout == NULL) {
+            fprintf(stderr, "[-] file opening failed\n");
+            exit(EXIT_FAILURE);
+        }
+        printf("The number of encoded characters is: %d\n", encode(fin, fout));
+
+
+        fclose(fin);
+        fclose(fout);
+    }
+
+    if (choice == 1) {
+        fin = fopen("../source2.txt", "r");
+        fout = fopen("../decoded.txt", "w");
+        if (fin == NULL || fout == NULL) {
+            fprintf(stderr, "[-] file opening failed\n");
+            exit(EXIT_FAILURE);
+        }
+        printf("The number of decoded characters is: %d\n", decode(fin, fout));
+
+
+        fclose(fin);
+        fclose(fout);
+    }
+
+}
