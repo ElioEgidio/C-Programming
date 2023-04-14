@@ -1,5 +1,7 @@
 #include <stdio.h>
-
+// Sum not implemented yet as it is an easier task to accomplish, this code 
+// is meant to show how to iterate in complex manner through matrices.
+// For a better understanding also refer to ---> https://github.com/Aghavali9/PT-Polito/blob/main/Lab04/3/Lab04_3.c
 int main() {
 
     int max_rows, max_col;
