@@ -1,3 +1,5 @@
+// COMPLETE
+// minor problem in line 30 --> int teams[6] = {0}; : cannot put directly max_r, but actual value of max_r is allowed. Don't know why
 #include <stdio.h>
 
 void findLeader(int matrix[19][19], int max_r, int max_c);
