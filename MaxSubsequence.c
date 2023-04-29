@@ -1,3 +1,6 @@
+// code not optimal and not 100% correct but it was a first attempt, will try to improve it later on
+
+
 #include <stdio.h>
 
 void subSequences(int v[], int n);
