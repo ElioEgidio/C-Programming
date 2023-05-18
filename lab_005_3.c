@@ -1,3 +1,7 @@
+// main idea is correct, works only for left or right but code is modular and a couple morefors would also do up and down, in particular
+// my code would treat up as left and down as right, I just change the printing method. Doing all of this would require time and i just wnated to understand the main idea:
+
+
 #include <stdio.h>
 #include <string.h>
 
